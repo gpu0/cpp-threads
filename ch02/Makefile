@@ -2,7 +2,7 @@
 
 CC=g++
 CFLAGS=-std=c++11
-all: ch02.1 ch02.2 ch02.3 ch02.4 ch02.5
+all: ch02.1 ch02.2 ch02.3 ch02.4 ch02.5 ch02.6
 
 ch02.1: ch02.1.cpp
 	$(CC) $(CFLAGS) ch02.1.cpp -o ch02.1 -pthread
@@ -19,5 +19,8 @@ ch02.4: ch02.4.cpp
 ch02.5: ch02.5.cpp
 	$(CC) $(CFLAGS) ch02.5.cpp -o ch02.5 -pthread
 
+ch02.6: ch02.6.cpp
+	$(CC) $(CFLAGS) ch02.6.cpp -o ch02.6 -pthread
+
 clean:
-	rm ch02.1 ch02.2 ch02.3 ch02.4 ch02.5
+	rm ch02.1 ch02.2 ch02.3 ch02.4 ch02.5 ch02.6
