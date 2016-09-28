@@ -18,11 +18,21 @@ void inc()
     val++;
 }
 
-void incWithLock()
+void incWithLockCons()
 {
     for(uint32_t i=0;i<ITER;i++)
     {
         inc();
+    }
+}
+
+void incWithLockNoCons()
+{
+    for(uint32_t i=0;i<ITER;i++)
+    {
+        lock.lock();
+        val++;
+        lock.unlock();
     }
 }
 
@@ -40,6 +50,8 @@ int main()
     std::vector<std::thread> threads(num_cpus);
     clock_t start, stop;
     double run_time;
+
+    // For Atomics
     start = clock();
     for(uint32_t i=0;i<num_cpus;i++)
     {
@@ -52,10 +64,12 @@ int main()
     stop = clock();
     run_time = (double)(stop - start)/CLOCKS_PER_SEC;
     std::cout<<"Atomics took: "<<run_time<<std::endl;
+
+    // For Locks without Constructor
     start = clock();
     for(uint32_t i=0;i<num_cpus;i++)
     {
-        threads[i] = std::thread(incWithLock);
+        threads[i] = std::thread(incWithLockNoCons);
     }
     for(uint32_t i=0;i<num_cpus;i++)
     {
@@ -63,5 +77,19 @@ int main()
     }
     stop = clock();
     run_time = (double)(stop - start)/CLOCKS_PER_SEC;
-    std::cout<<"Locks took: "<<run_time<<std::endl;
+    std::cout<<"Locks without Cons: "<<run_time<<std::endl;
+
+    // For Locks with Constructor
+    start = clock();
+    for(uint32_t i=0;i<num_cpus;i++)
+    {
+        threads[i] = std::thread(incWithLockCons);
+    }
+    for(uint32_t i=0;i<num_cpus;i++)
+    {
+        threads[i].join();
+    }
+    stop = clock();
+    run_time = (double)(stop - start)/CLOCKS_PER_SEC;
+    std::cout<<"Locks with Cons: "<<run_time<<std::endl;
 }
