@@ -1,9 +1,9 @@
-#include <iostream>
-#include <thread>
-#include <condition_variable>
-#include <mutex>
 #include <chrono>
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
 #include <queue>
+#include <thread>
 using namespace std;
 
 mutex goods_mutex;
@@ -20,7 +20,7 @@ int main() {
       c++;
       goods_mutex.unlock();
     }
-  done = true;
+    done = true;
   });
 
   thread consumer([&]() {
